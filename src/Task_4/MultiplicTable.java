@@ -1,11 +1,7 @@
 package Task_4;
 
 import javax.swing.*;
-import javax.swing.event.TableColumnModelListener;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.util.Enumeration;
 
 public class MultiplicTable {
     static int FIRST_NUMB = 1;

@@ -24,6 +24,7 @@ public class ArithmeticProgression {
             } while (flag);
         }
         arithmeticProgression(massMember);
+        geometricProgression(massMember);
     }
 
     /* Метод возвращает и считывает количество тестовых данных (выявляя не введен ли ноль или нечисловое значение).
@@ -99,6 +100,20 @@ public class ArithmeticProgression {
                 result += massMember[i] + massMember[i + 1] * j;
             }
             System.out.printf("Результат арифметической прогрессии с первым членом %d и шагом %d для %d членов = %d",
+                    massMember[i], massMember[i+1], massMember[i + COUNT_OF_DATA - 1], result);
+            System.out.println();
+            result = 0;
+        }
+    }
+
+    /* Метод осуществляет вычисление геометрической прогрессии */
+    static void geometricProgression(int[] massMember) {
+        int result = 0;
+        for (int i = 0; i < massMember.length; i = i + 3) {
+            for (int j = 0; j < massMember[i + COUNT_OF_DATA - 1]; j++) {
+                result += massMember[i] * Math.pow(massMember[i + 1],j);
+            }
+            System.out.printf("Результат геометрической прогрессии с первым членом %d и шагом %d для %d членов = %d",
                     massMember[i], massMember[i+1], massMember[i + COUNT_OF_DATA - 1], result);
             System.out.println();
             result = 0;

@@ -1,4 +1,4 @@
-package Task_4.VendingMachine;
+package VendingMachine;
 
 public class Drinks {
     private String drink;

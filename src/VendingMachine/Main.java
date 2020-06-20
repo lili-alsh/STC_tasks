@@ -1,4 +1,4 @@
-package Task_4.VendingMachine;
+package VendingMachine;
 
 import java.util.Arrays;
 import java.util.Scanner;

@@ -11,6 +11,7 @@ public class Main {
         int money=0;
 
         Scanner scan=new Scanner(System.in);
+        // If money is less than minimal price of drink, it is necessary to repeat input of deposit.
         while (true) {
             System.out.println("Введите депозит");
             try {

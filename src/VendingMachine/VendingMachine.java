@@ -9,6 +9,8 @@ public class VendingMachine {
     final int MIN_PRICE=TEA.getPrice();
     Scanner scan=new Scanner(System.in);
 
+    /* Add user's money. Return true and initialise money for further methods if money is more than minimal drink's price.
+     */
     public boolean addMoney (int money) {
         if (money<MIN_PRICE) {
             System.out.println("Недостаточно средств");
@@ -19,10 +21,13 @@ public class VendingMachine {
         }
     }
 
+    /* Return selected drink depending on choice of button. If there's not input button it's required to repeat input.
+    Handle exception of incorrect input (ex. words instead of number).
+    */
     public Drink getOrder (){
         Drink [] drinks={TEA,COFEE,CACAO,COLA,FANTA};
         Drink selectedDrink=TEA;
-        int button=0;
+        int button;
         boolean noDrink=true;
         do {
             try {
@@ -49,6 +54,8 @@ public class VendingMachine {
       return selectedDrink;
     }
 
+    /* Interact with user: give drink, show money balance, offer to repeat order, return money change.
+    * */
     public String takeDrink(Drink drink) {
         String str="";
         if (money>=drink.getPrice()) {

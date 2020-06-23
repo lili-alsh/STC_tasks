@@ -1,31 +1,20 @@
 package VendingMachine;
 
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
 
-        VendingMachine vm=new VendingMachine();
+        Drink[] hotDrinks={new HotDrink("Чай", 100, 1),
+                new HotDrink("Кофе", 100, 2),
+                new HotDrink("Какао", 150, 3)};
 
-        String choice="";
-        int money=0;
+        Drink[] coldDrinks={new ColdDrink("Кока-кола", 200, 1),
+                new ColdDrink("Фанта", 200, 2),
+                new ColdDrink("Квас", 250, 3)};
 
-        Scanner scan=new Scanner(System.in);
-        // If money is less than minimal price of drink, it is necessary to repeat input of deposit.
-        while (true) {
-            System.out.println("Введите депозит");
-            try {
-               money=Integer.parseInt(scan.next());
-               if (vm.addMoney(money)) break;
-            } catch (NumberFormatException e) {
-                System.out.println("Недопустимый ввод. Повторите.");
-            }
-        }
+        VendingMachine vmHotDrink=new VendingMachine(hotDrinks);
+        VendingMachine vmColdDrink=new VendingMachine(coldDrinks);
 
-        do {
-            Drink drink=vm.getOrder();
-            choice=vm.takeDrink(drink);
-        }
-        while (!choice.equals("НЕТ") && !choice.equals("Недостаточно средств"));
+        vmHotDrink.addMoney();
+        vmHotDrink.takeDrink();
     }
 }

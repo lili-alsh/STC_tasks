@@ -1,34 +1,50 @@
 package VendingMachine;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
-import static VendingMachine.Drink.*;
-
 public class VendingMachine {
-    public int money;
-    final int MIN_PRICE=TEA.getPrice();
+    public double money;
+    private Drink[] drinks;
+
+    public VendingMachine(Drink[] drinks) {
+        this.drinks = drinks;
+    }
+
     Scanner scan=new Scanner(System.in);
 
-    /* Add user's money. Return true and initialise money for further methods if money is more than minimal drink's price.
+    private double minPrice() {
+        double [] drinkPrices=new double[drinks.length];
+        for (int i = 0; i <drinks.length ; i++) {
+            drinkPrices[i]=drinks[i].getPrice();
+        }
+        Arrays.sort(drinkPrices);
+        return drinkPrices[0];
+    }
+
+    /* Add user's money. If money is less than minimal price of drink, it is necessary to repeat input of deposit.
      */
-    public boolean addMoney (int money) {
-        if (money<MIN_PRICE) {
-            System.out.println("Недостаточно средств");
-            return false;
-        } else{
-            this.money=money;
-            return true;
+    public void addMoney () {
+        while (true) {
+            System.out.println("Введите депозит");
+            try {
+                money=Integer.parseInt(scan.next());
+                if (money < minPrice()) {
+                    System.out.println("Недостаточно средств");
+                } else{
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Недопустимый ввод. Повторите.");
+            }
         }
     }
 
-    /* Return selected drink depending on choice of button. If there's not input button it's required to repeat input.
+    /* Return button depending. If there's not input button it's required to repeat input.
     Handle exception of incorrect input (ex. words instead of number).
     */
-    public Drink getOrder (){
-        Drink [] drinks={TEA,COFEE,CACAO,COLA,FANTA};
-        Drink selectedDrink=TEA;
-        int button;
-        boolean noDrink=true;
+    private int getOrder (){
+        int button=0;
         do {
             try {
                 System.out.println("Выберите напиток:");
@@ -38,50 +54,53 @@ public class VendingMachine {
                 button=Integer.parseInt(scan.next());
                 for (Drink drink:drinks) {
                     if (button==drink.getButton()) {
-                        selectedDrink=drink;
-                        noDrink=false;
-                        break;
+                        return button;
                     }
                 }
-                if (noDrink) {
-                    System.out.println("Такого напитка нет");
-                }
+                System.out.println("Такого напитка нет");
             } catch (NumberFormatException e) {
                 System.out.println("Ошибка ввода. Повторите.");
             }
         }
-        while (noDrink);
-      return selectedDrink;
+        while (true);
     }
 
     /* Interact with user: give drink, show money balance, offer to repeat order, return money change.
     * */
-    public String takeDrink(Drink drink) {
+    public void takeDrink() {
+        int button=getOrder();
         String str="";
-        if (money>=drink.getPrice()) {
+        for (Drink drink:drinks) {
+            if (drink.getButton()==button) {
+                if (money>=drink.getPrice()) {
+                    money-=drink.getPrice();
+                    System.out.printf("Получите %s", drink.getTitle());
+                    System.out.println();
 
-            while (!str.equals("ДА") && !str.equals("НЕТ")) {
-                System.out.println("Что-нибудь еще?");
-                System.out.println("ДА НЕТ");
-                str=scan.next();
+                    if (money>=minPrice()){
+                        while (!str.equals("ДА") && !str.equals("НЕТ")) {
+                            System.out.println("Остаток на счете " + money);
+                            System.out.println("Что-нибудь еще?");
+                            System.out.println("ДА НЕТ");
+                            str=scan.next();
+                        }
+                        if (str.equals("НЕТ")) {
+                            System.out.println("Получите сдачу "+ money);
+                            break;
+                        } else {
+                            System.out.println("Рекурсия");
+                            takeDrink();
+                        }
+                    } else if (money>0){
+                        System.out.println("Получите сдачу "+ money);
+                        break;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
             }
-            money-=drink.getPrice();
-            System.out.printf("Получите %s", drink.getTitle());
-            System.out.println();
-
-            if (str.equals("НЕТ")) {
-                System.out.printf("Получите сдачу %d",money);
-                System.out.println();
-                return "НЕТ";
-            } else  {
-                return "ДА";
-            }
-        } else {
-            if ((money+drink.getPrice())>0) {
-                System.out.printf("Получите сдачу %d",money+drink.getPrice());
-                System.out.println();
-            }
-            return "Недостаточно средств";
         }
     }
 }
